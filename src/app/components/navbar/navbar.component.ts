@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
 import { inject } from '@angular/core';
+import Swal from 'sweetalert2'; //librería para gestión de mensajes
+
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +14,7 @@ import { inject } from '@angular/core';
 })
 export class NavbarComponent {
 
+  private _router = inject(Router);
   _authService = inject(LoginService);
   isMenuOpen = false;
 
@@ -24,7 +27,17 @@ export class NavbarComponent {
   }
 
   logout() {
-    this._authService.logout()
+    this._authService.logout();
+    // Mostramos el mensaje con SweetAlert2
+    Swal.fire({
+      icon: 'success',
+      title: 'Sesión cerrada',
+      text: 'Has cerrado sesión exitosamente.',
+      showConfirmButton: false,
+      timer: 2000 // Mensaje desaparece automáticamente después de 2 segundos
+    }).then(() => {
+      this._router.navigate(['/login'])
+    });
   }
 
 }
